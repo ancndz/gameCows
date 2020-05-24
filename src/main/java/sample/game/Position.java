@@ -1,14 +1,8 @@
 package sample.game;
 
 public class Position {
-    //private int position;
-    private int digit;
+    private final int digit;
     private boolean isGuessed = false;
-
-    /*public Position(int digit, int position) {
-        this.digit = digit;
-        this.position = position;
-    }*/
 
     public Position(int digit) {
         this.digit = digit;
@@ -26,7 +20,11 @@ public class Position {
         return isGuessed;
     }
 
-    /*public int getPosition() {
-        return position;
-    }*/
+    @Override
+    public String toString() {
+        return "Position{" +
+                "digit=" + digit +
+                ", isGuessed=" + isGuessed +
+                '}';
+    }
 }

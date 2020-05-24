@@ -1,30 +1,20 @@
 package sample.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SecretCombination {
     private final List<Position> combination;
+    private int rightPositions = 0;
 
-    SecretCombination(List<Integer> rawList) {
+    public SecretCombination(List<Integer> rawList) {
         this.combination = new ArrayList<>();
         for (Integer integer : rawList) {
             this.combination.add(new Position(integer));
         }
     }
 
-    public List<Position> getGuessedPositions() {
-        List<Position> positionList = new ArrayList<>();
-        for (Position pos: this.combination) {
-            if (pos.isGuessed()) {
-                positionList.add(pos);
-            }
-        }
-        return positionList;
-    }
-
-    public int[] guess(List<Integer> guessingList) {
+    public int guess(List<Integer> guessingList) {
         List<Position> rightPositions = new ArrayList<>();
         int count = 0;
         for (int i = 0; i < this.combination.size(); i++) {
@@ -39,12 +29,24 @@ public class SecretCombination {
                 }
             }
         }
-
-        return new int[]{rightPositions.size(), count};
-        //return rightPositions;
+        this.rightPositions = rightPositions.size();
+        //System.out.println(this.toString());
+        return count;
     }
 
-    public List<Position> getCombination() {
-        return combination;
+    public int getRightPositions() {
+        return rightPositions;
+    }
+
+    public int getSize() {
+        return this.combination.size();
+    }
+
+    @Override
+    public String toString() {
+        return "SecretCombination{" +
+                "combination=" + combination +
+                ", rightPositions=" + rightPositions +
+                '}';
     }
 }

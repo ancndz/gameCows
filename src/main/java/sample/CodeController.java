@@ -12,15 +12,22 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CodeController {
 
     private String firstPlayerName;
     private String secondPlayerName;
+
+    private boolean isPVE = false;
+
+    public void setPVE(boolean PVE) {
+        isPVE = PVE;
+        if (PVE) {
+            this.secondPlayerCode.setEditable(false);
+        }
+    }
 
     @FXML
     private Button startGameButton;
@@ -67,8 +74,14 @@ public class CodeController {
 
         List<Integer> firstPlayerCodeList = stringToList(firstPlayerCode.getText().trim());
         System.out.println("Player One code:" + firstPlayerCode.getText().trim());
-        List<Integer> secondPlayerCodeList = stringToList(secondPlayerCode.getText().trim());
-        System.out.println("Player Two code:" + secondPlayerCode.getText().trim());
+        List<Integer> secondPlayerCodeList;
+        if (!this.isPVE) {
+            secondPlayerCodeList = stringToList(secondPlayerCode.getText().trim());
+            System.out.println("Player Two code:" + secondPlayerCode.getText().trim());
+        } else {
+            secondPlayerCodeList = getRandomList(firstPlayerCodeList.size());
+        }
+
 
         System.out.println("lengths:" + firstPlayerCodeList.size() +", "+ secondPlayerCodeList.size());
 
@@ -83,14 +96,27 @@ public class CodeController {
             Parent root = loader.getRoot();
 
             Controller controller = loader.getController();
+            if (this.isPVE) {
+                controller.setSecondTab();
+            }
             controller.startNewGame(firstPlayerName, secondPlayerName, firstPlayerCodeList, secondPlayerCodeList);
 
             Stage stage = new Stage();
+            stage.setTitle("Быки и Коровы");
             stage.setScene(new Scene(root));
             stage.show();
         } else {
             this.errorLabel.setText("Ошибка! Введите числа равной длины.");
         }
+    }
+
+    private List<Integer> getRandomList(int size) {
+        List<Integer> machineList = new ArrayList<>();
+        Random random = new Random();
+        for(int i = 0; i < size; i++) {
+            machineList.add(random.nextInt());
+        }
+        return machineList;
     }
 
     private List stringToList(String s) {

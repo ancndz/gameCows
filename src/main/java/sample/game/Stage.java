@@ -1,62 +1,68 @@
 package sample.game;
 
-public class Stage {
-    private Move playerOneMove;
-    private Move playerTwoMove;
+import java.util.List;
 
-    private int playerOnePoints = 0;
-    private int playerTwoPoints = 0;
+public class Stage {
+    private final Player playerOne;
+    private final Player playerTwo;
+
+    private List<Integer> playerOneGuessingList;
+    private List<Integer> playerTwoGuessingList;
 
     private int playerOneCows = 0;
+    private int playerOneBulls = 0;
     private int playerTwoCows = 0;
+    private int playerTwoBulls = 0;
 
-
-    Stage(){}
-
-    public Move getPlayerOneMove() {
-        return playerOneMove;
+    public Stage(Player playerOne, Player playerTwo) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
     }
 
-    public void setPlayerOneMove(Move playerOneMove) {
-        this.playerOneMove = playerOneMove;
+    public void playerOneMove(List<Integer> hisGuessingList) {
+        this.playerOneGuessingList = hisGuessingList;
+        this.playerOneCows = this.playerTwo.getSecretCombination().guess(hisGuessingList);
+        this.playerOneBulls = this.playerTwo.getSecretCombination().getRightPositions();
+        this.playerOne.addScore(playerOneBulls);
     }
 
-    public Move getPlayerTwoMove() {
-        return playerTwoMove;
+    public void playerTwoMove(List<Integer> hisGuessingList) {
+        this.playerTwoGuessingList = hisGuessingList;
+        this.playerTwoCows = this.playerOne.getSecretCombination().guess(hisGuessingList);
+        this.playerTwoBulls = this.playerOne.getSecretCombination().getRightPositions();
+        this.playerTwo.addScore(playerTwoBulls);
     }
 
-    public void setPlayerTwoMove(Move playerTwoMove) {
-        this.playerTwoMove = playerTwoMove;
+    public int getPlayerOneCows() {
+        return playerOneCows;
     }
 
-    public SecretCombination PlayerOneMove() {
-        SecretCombination ans = this.playerOneMove.MakeMove();
-        this.playerOnePoints = this.playerOneMove.getPoints();
-        this.playerOneCows = this.playerOneMove.getCows();
-        return ans;
+    public int getPlayerTwoCows() {
+        return playerTwoCows;
     }
 
-    public SecretCombination PlayerTwoMove() {
-        SecretCombination ans = this.playerTwoMove.MakeMove();
-        this.playerTwoPoints = this.playerTwoMove.getPoints();
-        this.playerTwoCows = this.playerTwoMove.getCows();
-        return ans;
+    public int getPlayerOneBulls() {
+        return playerOneBulls;
     }
 
-    public int getPlayerOnePoints() {
-        return playerOnePoints;
-    }
-
-    public int getPlayerTwoPoints() {
-        return playerTwoPoints;
+    public int getPlayerTwoBulls() {
+        return playerTwoBulls;
     }
 
     @Override
     public String toString() {
-        return "Этап:\n\t" +
-                playerOneMove + "\n\t" +
-                playerTwoMove +"\n\t" +
-                playerOneMove.getPlayerName() + " очки = " + playerOnePoints +"\n\t" +
-                playerTwoMove.getPlayerName() + " очки = " + playerTwoPoints +"\n\n";
+        return "\nХод: " +
+                "\n\tИгрок 1: " + playerOne +
+                "\n\t\tЗагадал: " + playerOneGuessingList +
+                "\n\t\tПолучил коров: " + playerOneCows + " коров(ы/у)" +
+                "\n\t\tПолучил быков: " + playerOneBulls + " быка(ов)" +
+                "\n\tИгрок 2: " + playerTwo +
+                "\n\t\tЗагадал: " + playerTwoGuessingList +
+                "\n\t\tПолучил коров: " + playerTwoCows + " коров(ы/у)" +
+                "\n\t\tПолучил быков: " + playerTwoBulls + " быка(ов)" +
+                "\nСчет первого игрока: " + playerOne.getScore() +
+                "\nСчет второго игрока: " + playerTwo.getScore() + "\n"/* +
+                playerOne.getSecretCombination().toString() + "\n" +
+                playerTwo.getSecretCombination().toString()*/;
     }
 }

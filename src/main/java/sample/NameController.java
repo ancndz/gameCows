@@ -16,6 +16,16 @@ import java.io.IOException;
 
 public class NameController {
 
+    private boolean isPVE;
+
+    public void setPVE(boolean PVE) {
+        isPVE = PVE;
+        if (PVE) {
+            this.secondPlayerName.appendText("Бездушная Машина");
+            this.secondPlayerName.setEditable(false);
+        }
+    }
+
     @FXML
     private Button nextStepButton;
 
@@ -33,8 +43,6 @@ public class NameController {
 
     @FXML
     void initialize() {
-        System.out.println("Init names inputs...");
-        //this.nextStepButton.setDisable(true);
     }
 
     @FXML
@@ -53,7 +61,6 @@ public class NameController {
 
     @FXML
     void codesStep(ActionEvent event) throws IOException {
-
         String firstPlayerNameString = firstPlayerName.getText().trim();
         System.out.println("Player One name:" + firstPlayerNameString);
         String secondPlayerNameString = secondPlayerName.getText().trim();
@@ -69,6 +76,7 @@ public class NameController {
 
             CodeController codeController = loader.getController();
             codeController.getPlayerNames(firstPlayerNameString, secondPlayerNameString);
+            codeController.setPVE(this.isPVE);
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));

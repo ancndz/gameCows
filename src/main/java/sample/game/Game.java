@@ -4,69 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
-    private final int codeLength;
-    private String PlayerOneName;
-    private String PlayerTwoName;
+    private final Player playerOne;
+    private final Player playerTwo;
 
-    private int playerOneTotalPoints = 0;
-    private int playerTwoTotalPoints = 0;
+    private int gameLength;
+    private final List<Stage> stages;
 
-    private SecretCombination playerOneSecret;
-    private SecretCombination playerTwoSecret;
-
-    private int stageNum = 1;
-
-    private List<Stage> stages;
-
-    public Game(String playerOneName, String playerTwoName, List<Integer> playerOneSecret, List<Integer> playerTwoSecret) {
-        PlayerOneName = playerOneName;
-        PlayerTwoName = playerTwoName;
-        this.playerOneSecret = new SecretCombination(playerOneSecret);
-        this.playerTwoSecret = new SecretCombination(playerTwoSecret);
-        this.codeLength = playerOneSecret.size();
+    public Game(Player playerOne, Player playerTwo) {
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
         this.stages = new ArrayList<>();
     }
 
-    public String newStage(List<Integer> playerOneGuessList, List<Integer> playerTwoGuessList) {
-        if (playerOneGuessList.size() != this.codeLength || playerTwoGuessList.size() != this.codeLength) {
-            return "Wrong guess length!";
-        }
-        Move playerOneMove = new Move(this.PlayerOneName, playerTwoSecret, playerOneGuessList);
-        Move playerTwoMove = new Move(this.PlayerTwoName, playerOneSecret, playerTwoGuessList);
-
-        Stage stage = new Stage();
-        stage.setPlayerOneMove(playerOneMove);
-        stage.setPlayerTwoMove(playerTwoMove);
-
-        this.playerTwoSecret = stage.PlayerOneMove();
-        this.playerOneSecret = stage.PlayerTwoMove();
-
-        stages.add(stage);
-
-        this.playerOneTotalPoints += stage.getPlayerOnePoints();
-        this.playerTwoTotalPoints += stage.getPlayerTwoPoints();
-
-        StringBuilder history = new StringBuilder();
-        history.append("#").append(stageNum++).append(" ").append(stage.toString());
-
-        if (this.playerOneTotalPoints == codeLength) {
-            history.append(String.format("\n~~~~~Игрок %s победил!~~~~~\n", this.PlayerOneName));
-        }
-        if (this.playerTwoTotalPoints == codeLength) {
-            history.append(String.format("\n~~~~~Игрок %s победил!~~~~~\n", this.PlayerTwoName));
-        }
-
-        return history.toString();
+    public Result nextStage(List<Integer> playerOneGuessingList, List<Integer> playerTwoGuessingList) {
+        Stage stage = new Stage(this.playerOne, this.playerTwo);
+        stage.playerOneMove(playerOneGuessingList);
+        stage.playerTwoMove(playerTwoGuessingList);
+        this.stages.add(stage);
+        return new Result(stage.getPlayerOneCows(), stage.getPlayerOneBulls(), stage.getPlayerTwoCows(), stage.getPlayerTwoBulls());
     }
 
     public String getHistory() {
-        StringBuilder history = new StringBuilder();
-        for (int i = 0; i < this.stages.size(); i++) {
-            history.append("#").append(i).append(" ").append(this.stages.get(i).toString());
+        StringBuilder history = new StringBuilder("");
+        for (int i = 0; i < stages.size(); i++) {
+            history.append("#").append(i).append(" ").append(stages.get(i).toString());
         }
-        history.append("СЧЕТ ИГРЫ: ").append(this.playerOneTotalPoints).append(":").append(this.playerTwoTotalPoints);
         return history.toString();
     }
 
-
+    public Result nextStagePVE(List stringToList) {
+        return nextStage(stringToList, ((GameBot) this.playerTwo).getPrediction());
+    }
 }
