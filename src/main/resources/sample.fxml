@@ -44,7 +44,7 @@
                         <Button fx:id="newGameButtonPVE" layoutX="310.0" layoutY="14.0" mnemonicParsing="false" onAction="#initNewGamePVE" text="Начать новую игру" />
                         <AnchorPane layoutX="13.0" layoutY="41.0" prefHeight="436.0" prefWidth="423.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="40.0">
                            <children>
-                              <ScrollPane fx:id="history" layoutX="70.0" layoutY="76.0" prefHeight="346.0" prefWidth="280.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="76.0">
+                              <ScrollPane layoutX="70.0" layoutY="76.0" prefHeight="346.0" prefWidth="280.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="76.0">
                                  <content>
                                     <TextArea fx:id="historyPVE" editable="false" maxHeight="1.7976931348623157E308" prefHeight="343.0" prefWidth="278.0" />
                                  </content>

@@ -62,6 +62,24 @@ public class Controller {
     private Label errorText;
 
     @FXML
+    private Button newGameButtonPVE;
+
+    @FXML
+    private TextArea historyPVE;
+
+    @FXML
+    private Button doneStageButtonPVE;
+
+    @FXML
+    private TextField playerCode;
+
+    @FXML
+    private Label playerName;
+
+    @FXML
+    private Label errorText1;
+
+    @FXML
     void nextStage(ActionEvent event) {
         List<Integer> playerOneGuess = stringToList(this.firstPlayerCode.getText());
         List<Integer> playerTwoGuess = stringToList(this.secondPlayerCode.getText());
@@ -76,6 +94,11 @@ public class Controller {
         } else {
             this.errorText.setText("Ошибка! Введите предположения длины " + this.codeLen);
         }
+    }
+
+    @FXML
+    void nextStagePVE(ActionEvent event) {
+
     }
 
 
@@ -105,6 +128,10 @@ public class Controller {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.showAndWait();
+    }
+
+    @FXML
+    void initNewGamePVE(ActionEvent event) throws IOException {
     }
 
     void startNewGame(String playerOneName, String playerTwoName,
