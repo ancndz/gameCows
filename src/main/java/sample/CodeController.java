@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,12 +11,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import sample.game.Verifier;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class CodeController {
+
+    private Verifier verifier = new Verifier();
 
     private String firstPlayerName;
     private String secondPlayerName;
@@ -64,7 +68,9 @@ public class CodeController {
         Parent root = loader.getRoot();
 
         Stage stage = new Stage();
+        stage.setTitle("Быки и Коровы");
         stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.show();
     }
 
@@ -72,22 +78,21 @@ public class CodeController {
     @FXML
     void startGame(ActionEvent event) throws IOException {
 
-        List<Integer> firstPlayerCodeList = stringToList(firstPlayerCode.getText().trim());
+        List<Integer> firstPlayerCodeList = verifier.stringToList(firstPlayerCode.getText().trim());
         System.out.println("Player One code:" + firstPlayerCode.getText().trim());
         List<Integer> secondPlayerCodeList;
         if (!this.isPVE) {
-            secondPlayerCodeList = stringToList(secondPlayerCode.getText().trim());
+            secondPlayerCodeList = verifier.stringToList(secondPlayerCode.getText().trim());
             System.out.println("Player Two code:" + secondPlayerCode.getText().trim());
         } else {
-            secondPlayerCodeList = getRandomList(firstPlayerCodeList.size());
+            secondPlayerCodeList = verifier.getRandomList(firstPlayerCodeList.size());
         }
-
 
         System.out.println("lengths:" + firstPlayerCodeList.size() +", "+ secondPlayerCodeList.size());
 
-        if (!firstPlayerCodeList.isEmpty() &&
-                !secondPlayerCodeList.isEmpty() &&
-                    secondPlayerCodeList.size() == firstPlayerCodeList.size()) {
+        if ((!firstPlayerCodeList.isEmpty() && !secondPlayerCodeList.isEmpty()) &&
+                (secondPlayerCodeList.size() == firstPlayerCodeList.size()) &&
+                (verifier.isListUnique(firstPlayerCodeList) && verifier.isListUnique(secondPlayerCodeList))) {
             ((Button) event.getSource()).getScene().getWindow().hide();
 
             FXMLLoader loader = new FXMLLoader();
@@ -104,34 +109,16 @@ public class CodeController {
             Stage stage = new Stage();
             stage.setTitle("Быки и Коровы");
             stage.setScene(new Scene(root));
+
+            stage.setOnCloseRequest(e -> Platform.exit());
             stage.show();
         } else {
-            this.errorLabel.setText("Ошибка! Введите числа равной длины.");
+            this.errorLabel.setText("Ошибка! Введите уникальные числа равной длины.");
         }
     }
 
-    private List<Integer> getRandomList(int size) {
-        List<Integer> machineList = new ArrayList<>();
-        Random random = new Random();
-        for(int i = 0; i < size; i++) {
-            machineList.add(random.nextInt(9));
-        }
-        return machineList;
-    }
 
-    private List stringToList(String s) {
-        if (!s.isEmpty()) {
-            try {
-                Integer.parseInt(s);
-                return Arrays.stream(s.split("\\B"))
-                        .map(Integer::valueOf).collect(Collectors.toList());
-            } catch (Exception e) {
-                return Collections.EMPTY_LIST;
-            }
-        } else {
-            return Collections.EMPTY_LIST;
-        }
-    }
+
 
     public void getPlayerNames(String firstName, String secondName) {
         this.playerOneName.setText(firstName);

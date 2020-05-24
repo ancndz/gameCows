@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -79,11 +80,13 @@ public class Controller {
     @FXML
     private Label playerName;
 
+    Verifier verifier = new Verifier();
+
     @FXML
     void nextStage(ActionEvent event) {
         if (tabPvP.isSelected()) {
-            List<Integer> playerOneList = new ArrayList<>(stringToList(this.firstPlayerCode.getText()));
-            List<Integer> playerTwoList = new ArrayList<>(stringToList(this.secondPlayerCode.getText()));
+            List<Integer> playerOneList = new ArrayList<>(verifier.stringToList(this.firstPlayerCode.getText()));
+            List<Integer> playerTwoList = new ArrayList<>(verifier.stringToList(this.secondPlayerCode.getText()));
             if (playerTwoList.isEmpty() || playerOneList.isEmpty()) {
                 this.errorText.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
             } else {
@@ -92,31 +95,16 @@ public class Controller {
                 this.history.setText(this.gamePVP.getHistory());
             }
         } else {
-            List<Integer> playerList = new ArrayList<>(stringToList(this.playerCode.getText()));
+            List<Integer> playerList = new ArrayList<>(verifier.stringToList(this.playerCode.getText()));
             if (playerList.isEmpty()){
                 this.errorText1.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
             } else {
                 this.errorText.setText("");
-                this.lastResultPVE = this.gamePVE.nextStagePVE(stringToList(this.playerCode.getText()));
+                this.lastResultPVE = this.gamePVE.nextStagePVE(verifier.stringToList(this.playerCode.getText()));
                 this.historyPVE.setText(this.gamePVE.getHistory());
             }
         }
     }
-
-    private List<Integer> stringToList(String s) {
-        if (!s.isEmpty()) {
-            try {
-                Integer.parseInt(s);
-                return Arrays.stream(s.split("\\B"))
-                        .map(Integer::valueOf).collect(Collectors.toList());
-            } catch (Exception e) {
-                return new ArrayList<Integer>(Collections.EMPTY_LIST);
-            }
-        } else {
-            return new ArrayList<Integer>(Collections.EMPTY_LIST);
-        }
-    }
-
 
     @FXML
     void initNewGame(ActionEvent event) throws IOException {
@@ -136,6 +124,8 @@ public class Controller {
         nameController.setPVE(tabPvE.isSelected());
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
+        stage.setTitle("Быки и Коровы");
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.showAndWait();
     }
 

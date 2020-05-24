@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,7 +55,9 @@ public class NameController {
         Parent root = loader.getRoot();
 
         Stage stage = new Stage();
+        stage.setTitle("Быки и Коровы");
         stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(e -> Platform.exit());
         stage.show();
     }
 
@@ -80,7 +83,8 @@ public class NameController {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-
+            stage.setTitle("Быки и Коровы");
+            stage.setOnCloseRequest(e -> Platform.exit());
             stage.show();
         } else {
             this.errorLabel.setText("Введите имена!");

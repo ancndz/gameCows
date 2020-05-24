@@ -23,7 +23,6 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(e -> Platform.exit());
         primaryStage.show();
 
-
     }
 
 
