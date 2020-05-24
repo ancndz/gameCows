@@ -19,6 +19,7 @@ public class Controller {
     private Game gamePVP;
     private Game gamePVE;
     private int codeLen = 0;
+    private int codeLenPVE = 0;
     private Result lastResult;
     private Result lastResultPVE;
 
@@ -81,29 +82,38 @@ public class Controller {
     @FXML
     void nextStage(ActionEvent event) {
         if (tabPvP.isSelected()) {
-            this.lastResult = this.gamePVP.nextStage(stringToList(this.firstPlayerCode.getText()), stringToList(this.secondPlayerCode.getText()));
-            this.history.setText(this.gamePVP.getHistory());
+            List<Integer> playerOneList = new ArrayList<>(stringToList(this.firstPlayerCode.getText()));
+            List<Integer> playerTwoList = new ArrayList<>(stringToList(this.secondPlayerCode.getText()));
+            if (playerTwoList.isEmpty() || playerOneList.isEmpty()) {
+                this.errorText.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
+            } else {
+                this.errorText.setText("");
+                this.lastResult = this.gamePVP.nextStage(playerOneList, playerTwoList);
+                this.history.setText(this.gamePVP.getHistory());
+            }
         } else {
-            this.lastResultPVE = this.gamePVE.nextStagePVE(stringToList(this.playerCode.getText()));
-            this.historyPVE.setText(this.gamePVE.getHistory());
+            List<Integer> playerList = new ArrayList<>(stringToList(this.playerCode.getText()));
+            if (playerList.isEmpty()){
+                this.errorText1.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
+            } else {
+                this.errorText.setText("");
+                this.lastResultPVE = this.gamePVE.nextStagePVE(stringToList(this.playerCode.getText()));
+                this.historyPVE.setText(this.gamePVE.getHistory());
+            }
         }
     }
 
-    private List stringToList(String s) {
+    private List<Integer> stringToList(String s) {
         if (!s.isEmpty()) {
             try {
                 Integer.parseInt(s);
                 return Arrays.stream(s.split("\\B"))
                         .map(Integer::valueOf).collect(Collectors.toList());
             } catch (Exception e) {
-                this.errorText.setText("Вводить нужно только числа!");
-                this.errorText1.setText("Вводить нужно только числа!");
-                return Collections.EMPTY_LIST;
+                return new ArrayList<Integer>(Collections.EMPTY_LIST);
             }
         } else {
-            this.errorText.setText("Поля пусты!");
-            this.errorText1.setText("Поля пусты!");
-            return Collections.EMPTY_LIST;
+            return new ArrayList<Integer>(Collections.EMPTY_LIST);
         }
     }
 
@@ -147,6 +157,7 @@ public class Controller {
     void startNewGame(String playerOneName, String playerTwoName,
                       List<Integer> playerOneCode, List<Integer> playerTwoCode) {
         this.codeLen = playerOneCode.size();
+        this.codeLenPVE = playerOneCode.size();
         Player playerOne = new Player(new SecretCombination(playerOneCode), playerOneName, this.codeLen);
         if (this.tabPvP.isSelected()) {
             Player playerTwo = new Player(new SecretCombination(playerTwoCode), playerTwoName, this.codeLen);

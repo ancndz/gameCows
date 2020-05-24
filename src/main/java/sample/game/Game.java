@@ -32,7 +32,8 @@ public class Game {
         return history.toString();
     }
 
-    public Result nextStagePVE(List stringToList) {
+    public Result nextStagePVE(List<Integer> stringToList) {
+        System.out.println(stringToList);
         return nextStage(stringToList, ((GameBot) this.playerTwo).getPrediction());
     }
 }

@@ -114,7 +114,7 @@ public class CodeController {
         List<Integer> machineList = new ArrayList<>();
         Random random = new Random();
         for(int i = 0; i < size; i++) {
-            machineList.add(random.nextInt());
+            machineList.add(random.nextInt(9));
         }
         return machineList;
     }
