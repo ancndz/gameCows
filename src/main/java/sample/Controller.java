@@ -91,6 +91,8 @@ public class Controller {
                 this.errorText.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
             } else {
                 this.errorText.setText("");
+                this.firstPlayerCode.clear();
+                this.secondPlayerCode.clear();
                 this.lastResult = this.gamePVP.nextStage(playerOneList, playerTwoList);
                 this.history.setText(this.gamePVP.getHistory());
             }
@@ -100,6 +102,7 @@ public class Controller {
                 this.errorText1.setText("Вводить нужно только числа длины равной " + this.codeLen + "!");
             } else {
                 this.errorText.setText("");
+                this.playerCode.clear();
                 this.lastResultPVE = this.gamePVE.nextStagePVE(verifier.stringToList(this.playerCode.getText()));
                 this.historyPVE.setText(this.gamePVE.getHistory());
             }
@@ -124,7 +127,7 @@ public class Controller {
         nameController.setPVE(tabPvE.isSelected());
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.setTitle("Быки и Коровы");
+        stage.setTitle("Быки и Коровы: НОВАЯ ИГРА");
         stage.setOnCloseRequest(e -> Platform.exit());
         stage.showAndWait();
     }

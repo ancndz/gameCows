@@ -26,13 +26,14 @@ public class Verifier {
         List<Integer> machineList = new ArrayList<>();
         List<Integer> existingDigits = new ArrayList<>();
         Random random = new Random();
-        for(int i = 0; i < size; i++) {
+        while (machineList.size() != size) {
             int randomInt = random.nextInt(9);
             if (!existingDigits.contains(randomInt)) {
                 machineList.add(randomInt);
-                existingDigits.add(i);
+                existingDigits.add(randomInt);
             }
         }
+        //System.out.println(machineList);
         return machineList;
     }
 

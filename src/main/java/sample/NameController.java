@@ -83,7 +83,7 @@ public class NameController {
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
-            stage.setTitle("Быки и Коровы");
+            stage.setTitle("Быки и Коровы: НОВАЯ ИГРА");
             stage.setOnCloseRequest(e -> Platform.exit());
             stage.show();
         } else {

@@ -27,7 +27,7 @@ public class Game {
     public String getHistory() {
         StringBuilder history = new StringBuilder("");
         for (int i = 0; i < stages.size(); i++) {
-            history.append("#").append(i).append(" ").append(stages.get(i).toString());
+            history.append("#").append(i+1).append(" ").append(stages.get(i).toString());
         }
         return history.toString();
     }

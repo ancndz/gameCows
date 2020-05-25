@@ -51,7 +51,7 @@ public class Stage {
 
     @Override
     public String toString() {
-        return "\nХод: " +
+        return "Ход: " +
                 "\n\tИгрок 1: " + playerOne +
                 "\n\t\tЗагадал: " + playerOneGuessingList +
                 "\n\t\tПолучил коров: " + playerOneCows + " коров(ы/у)" +
