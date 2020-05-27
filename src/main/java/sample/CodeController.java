@@ -117,9 +117,6 @@ public class CodeController {
         }
     }
 
-
-
-
     public void getPlayerNames(String firstName, String secondName) {
         this.playerOneName.setText(firstName);
         this.firstPlayerName = firstName;
